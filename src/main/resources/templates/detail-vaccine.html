@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<title>Detail Vaccine</title>
+
+<head th:replace="dashboard :: head">
+</head>
+
+<body class="fixed-sn light-blue-skin">
+	<header th:replace="dashboard :: header"></header>
+	<main style="padding-top: 15px;">
+		<div class="title">
+			<h2></h2>
+		</div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3">
+				<h4 style="text-align: center;">DETAIL VACCINE</h4>
+			</div>
+			<div style="height: 850px">
+				<form action="" method="get" id="detailVaccine"
+					th:object="${vaccine}" enctype="multipart/form-data">
+					<div class="card">
+						<div class="card-body">
+							<div class="form-group row">
+								<div class="col-sm-8">
+									<label for="">Vaccine Id:</label> <input
+										th:value="${vaccine.vaccineId}" type="text"
+										class="form-control" name="vaccineId" readonly="readonly">
+								</div>
+								<div class="col-sm-4">
+									<label for="">Status:</label> <input
+										th:value="${vaccine.active == true} ? 'Active' : 'In-active'"
+										type="text" class="form-control" name="active"
+										readonly="readonly">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="">Vaccine Name:</label> <input
+										th:value="${vaccine.vaccineName}" type="text"
+										class="form-control" name="vaccineName" readonly="readonly">
+								</div>
+								<div class="col-sm-4">
+									<label for="">Vaccine Type:</label> <input
+										th:value="${vaccine.vaccineType.vaccineTypeName}" type="text"
+										class="form-control" name="vaccineTypeName"
+										readonly="readonly">
+
+								</div>
+								<div class="col-sm-4">
+									<label for="">Number of Injection:</label> <input
+										th:value="${vaccine.numberOfInjection}" type="number"
+										class="form-control" name="numberOfInjection"
+										readonly="readonly">
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="">Usage:</label>
+									<textarea th:value="${vaccine.usage}" type="text"
+										class="form-control" name="usage" readonly="readonly"></textarea>
+								</div>
+								<div class="col-sm-4">
+									<label for="">Indication:</label>
+									<textarea th:value="${vaccine.indication}" type="text"
+										class="form-control" name="indication" readonly="readonly"></textarea>
+								</div>
+								<div class="col-sm-4">
+									<label for="">Contraindication:</label>
+									<textarea th:value="${vaccine.contraindication}" type="text"
+										class="form-control" name="contraindication"
+										readonly="readonly"></textarea>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="">Time of beginning next injection:</label> <input
+										th:value="${vaccine.timeBeginNextInjection}" type="text"
+										class="form-control" name="timeBeginNextInjection"
+										readonly="readonly">
+								</div>
+								<div class="col-sm-4">
+									<label for="">Time of ending next injection:</label> <input
+										th:value="${vaccine.timeEndNextInjection}" type="text"
+										class="form-control" name="timeEndNextInjection"
+										readonly="readonly">
+								</div>
+								<div class="col-sm-4">
+									<label for="">Origin:</label> <input
+										th:value="${vaccine.origin}" type="text" class="form-control"
+										name="origin" readonly="readonly">
+								</div>
+							</div>
+						</div>
+						<div sec:authorize="hasRole('ROLE_ADMIN')" class="text-left">
+							<a
+								th:href="|@{/vaccine/updateVaccine/{id}(id = ${vaccine.vaccineId})}|"
+								class="btn btn-warning mb-5 ml-5">Update Vaccine</a> <a
+								onclick="window.history.go(-1); return false;"
+								class="btn btn-primary mb-5 ml-5">Cancel</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+
+</body>
+
+</html>

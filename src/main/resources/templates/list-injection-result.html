@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head th:replace="dashboard :: head">
+</head>
+<title>List Injection Result</title>
+<body class="fixed-sn light-blue-skin">
+	<header th:replace="dashboard :: header"></header>
+	<!--Main Layout-->
+	<main style="padding-top: 15px;">
+		<div class="title"><h2></h2></div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3"><h4 style="text-align: center;">INJECTION RESULT LIST</h4></div>
+			<div>
+				<div class="card">
+					<div class="row">
+						<div class="mt-3">
+							<form th:action="@{/injection-result/search}" method="get">
+								<div class="option-entries">Show
+									<select name="sizee" id="size" class="select-entries" th:value="${sizee}" onchange="this.form.submit()">
+										<option th:each="e : ${sizeList}" th:value="${e}" th:text="${e}" th:selected="${e} == ${sizee}"></option>
+									</select>entries
+								</div>
+								<input type="text" name="keyword" id="keyword" size="30" value="" class="search-list form-control " placeholder="" />
+								<input type="submit" value="Search" style="max-width: fit-content; float: right; border: 0px;" class="form-control" />
+							</form>
+						</div>
+					</div>
+					<div style="text-align: center; color: red" th:text="${errorDelete}"></div>
+					<div style="text-align: center; color: green" th:text="${deleteSuccess}"></div>
+					<form id="tableDelete" method="post" th:action="@{/injection-result/delete}">
+						<div class="card-body pt-1">
+							<table class="table table-bordered table-hover order-column row-border mt-1" id="listEmployee">
+								<thead>
+									<tr class="topbar-card">
+										<th scope="row"><input type="checkbox" class="check" id="checkAll"></th>
+										<th scope="col">Customer</th>
+										<th scope="col">Vaccine Name</th>
+										<th scope="col">Prevention</th>
+										<th scope="col">Injection</th>
+										<th scope="col">Date of inject</th>
+										<th scope="col">Next inject date</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr style="font-weight: bold;" alt-title="" th:each="injectionResult : ${injectionResults}">
+										<td scope="row"><input type="checkbox" class="checkId" th:value="${injectionResult.injectionResultId}" th:name="idChecked"></td>
+										<td th:text="${injectionResult.customer.getUserName()} + '_' + ${injectionResult.customer.getFullName()}"></td>
+										<td th:text="${injectionResult.vaccine.getVaccineName()}"></td>
+										<td th:text="${injectionResult.prevention}"></td>
+										<td th:text="${injectionResult.numberOfInjection}"></td>
+										<td th:text="${injectionResult.injectionDate}"></td>
+										<td th:text="${injectionResult.nextInjectionDate}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="mb-4 ml-4 page-number">
+							<nav aria-label="Page navigation example" class="nav-number-page">
+								  <ul class="pagination" th:if="${totalPages > 1}">
+									  <li class="page-item">Total Rows: [[${totalItems}]]</li>
+									  <li class="page-item">
+										  <a th:if="${currentPage > 1}" th:href="@{'/injection-result/page/' + 1 + '?keyword=' + ${keyword}}">
+											  <span aria-hidden="true">First</span>
+											  <span class="sr-only">First</span>
+										  </a>
+										  <span th:unless="${currentPage > 1}">First</span>
+									  </li>
+									  <li class="page-item">
+										  <a th:if="${currentPage > 1}" th:href="@{'/injection-result/page/' + ${currentPage - 1} + '?keyword=' + ${keyword}}">
+											  <span aria-hidden="true">Previous</span>
+											  <span class="sr-only">Previous</span>
+										  </a>
+										  <span th:unless="${currentPage > 1}">Previous</span>
+									  </li>
+									  <li class="page-item">
+										  <span th:each="i : ${#numbers.sequence(1, totalPages)}">
+											  <a th:if="${currentPage != i}" th:href="@{'/injection-result/page/' + ${i} + '?keyword=' + ${keyword}}">[[${i}]]</a>
+											  <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;&nbsp;
+										  </span>
+									  </li>
+									  <li class="page-item">
+										  <a th:if="${currentPage < totalPages}" th:href="@{'/injection-result/page/' + ${currentPage + 1} + '?keyword=' + ${keyword}}">
+											  <span aria-hidden="true">Next</span>
+											  <span class="sr-only">Next</span>
+										  </a>
+										  <span th:unless="${currentPage < totalPages}">Next</span>
+									  </li>
+									  <li class="page-item">
+										  <a th:if="${currentPage < totalPages}" th:href="@{'/injection-result/page/' + ${totalPages} + '?keyword=' + ${keyword}}">
+											  <span aria-hidden="true">Last</span>
+											  <span class="sr-only">Last</span>
+										  </a>
+										  <span th:unless="${currentPage < totalPages}">Last</span>
+									  </li>
+								  </ul>
+							</nav>
+							<div sec:authorize="hasRole('ROLE_ADMIN')">
+								<button type="button" class="btn btn-success"><a th:href="@{/injection-result/add}" class="text-white">Create Inject Result</a></button>
+								<button th:action="@{/injection-result/update}" type="submit" class="btn btn-warning" onclick="return myFunction1()" formaction="/injection-result/update">Update Inject Result</button>
+								<button type="submit" class="btn btn-danger" onclick="return myFunction()">Delete Inject Result</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	<!--Main Layout-->
+	<!-- MDB -->
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+	<!-- Custom scripts -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#checkAll').click(function () {
+				if ($(this).is(":checked"))
+					$('.checkId').prop('checked', true);
+				else
+					$('.checkId').prop('checked', false);
+			});
+		});
+		function myFunction() {
+			if (!(confirm('Are you sure to delete?')))
+				return false;
+		}
+		function myFunction1() {
+			if (!(confirm('Are you sure to update?')))
+				return false;
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="dashboard :: head">
+</head>
+<title>Report Vaccine</title>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
+
+<body class="fixed-sn light-blue-skin">
+
+	<header th:replace="dashboard :: header"> </header>
+
+	<!--Main Layout-->
+	<main style="padding-top: 15px;">
+		<div class="title">
+			<h2></h2>
+		</div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3">
+				<h4 style="text-align: center;">REPORT VACCINE</h4>
+			</div>
+			<div>
+				<div class="card">
+					<div class="row ml-3 ">
+						<div class="mt-3 row" style="border-bottom: solid 1px #ccc;">
+							<div class="col-2">
+								<div>Display Type:</div>
+								<div>
+									<input type="radio" class="" id="showReport" checked>
+									Report <input type="radio" class="" id="showChart">
+									Chart
+								</div>
+							</div>
+
+							<div class="col-10">
+								<div style="text-align: center; color: red" th:text="${mess}"></div>
+								<form th:action="@{/report/searchVaccine}" method="get">
+									<table class="">
+										<tr>
+											<th scope="col" class="">Next Injection date:</th>
+											<th scope="col" class="">Vaccine Type:</th>
+											<th scope="col" class="">Origin:</th>
+											<th scope="col" class="">Action:</th>
+										</tr>
+										<tr>
+											<td class=""><span>Begin:</span><input type="date"
+												class="" th:value="${timeBeginNextInjection}"
+												name="timeBeginNextInjection" id="timeBeginNextInjection">
+												<span>End:</span><input type="date" class=""
+												th:value="${timeEndNextInjection}"
+												name="timeEndNextInjection" id="timeEndNextInjection">
+											</td>
+											<td class=""><input type="text" class=""
+												th:value="${vaccineTypeName}" name="vaccineTypeName"
+												id="vaccineTypeName"></td>
+											<td class=""><input type="text" class=""
+												th:value="${origin}" name="origin" id="origin"></td>
+											<td class="">
+												<button type="reset" class="btn btn-info">Reset</button>
+												<button type="submit" class="btn btn-info">Filter</button>
+											</td>
+										</tr>
+									</table>
+								</form>
+							</div>
+						</div>
+
+						<div style="text-align: center; color: red"></div>
+						<div style="text-align: center; color: red"></div>
+					</div>
+					<form id="tableDelete" method="post" action="">
+						<div class="card-body">
+							<table
+								class="table table-bordered table-hover order-column row-border mt-2"
+								id="reportVaccine">
+								<thead>
+									<tr style="background-color: darkcyan; color: white;">
+										<th scope="col">No.</th>
+										<th scope="col">Vaccine Name</th>
+										<th scope="col">Vaccine Type</th>
+										<th scope="col">Num of Inject</th>
+										<th scope="col">Begin next inject date</th>
+										<th scope="col">End next inject date</th>
+										<th scope="col">Origin</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="vaccine : ${vaccines}">
+										<td th:text="${vaccine.vaccineId}"></td>
+										<td th:text="${vaccine.vaccineName}"></td>
+										<td th:text="${vaccine.vaccineType.vaccineTypeName}"></td>
+										<td th:text="${vaccine.numberOfInjection}"></td>
+										<td
+											th:text="${#dates.format(vaccine.timeBeginNextInjection, 'dd/MM/yyyy')}"></td>
+										<td
+											th:text="${#dates.format(vaccine.timeEndNextInjection, 'dd/MM/yyyy')}"></td>
+										<td th:text="${vaccine.origin}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!--Main Layout-->
+	<!-- MDB -->
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript"
+		src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<!-- Custom scripts -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$('#reportVaccine').DataTable({
+		        "ordering": false,
+		        "searching": false,
+		        "pagingType": "simple_numbers",
+
+		    });
+			
+			$('#showReport').click(function () {
+				if ($(this).is(":checked"))
+					$('#showChart').prop('checked', false);
+				window.location.replace('reportVaccine');
+			});
+			
+			$('#showChart').click(function () {
+				if ($(this).is(":checked"))
+					$('#showReport').prop('checked', false);
+				window.location.replace('chartVaccine');
+			});
+		});
+
+	</script>
+</body>
+
+</html>

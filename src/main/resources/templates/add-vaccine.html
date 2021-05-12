@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<title>Create Vaccine</title>
+
+<head th:replace="dashboard :: head">
+</head>
+
+<body class="fixed-sn light-blue-skin">
+	<header th:replace="dashboard :: header"></header>
+	<main style="padding-top: 15px;">
+		<div class="title">
+			<h2></h2>
+		</div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3">
+				<h4 style="text-align: center;">CREATE VACCINE</h4>
+			</div>
+			<div style="height: 850px">
+				<form id="formAction" th:action="@{/vaccine/addVaccine}"
+					method="POST" th:object="${vaccine}">
+					<input type="hidden" name="action" value="create">
+					<div class="card">
+						<div class="card-body">
+							<div class="form-group row">
+								<div style="text-align: center; color: red"
+									th:text="${messError}"></div>
+								<div class="col-sm-8">
+									<label for="inputVaccineId">Vaccine Id(<span
+										class="avtype-red">*</span>) <span style="color: red;"
+										th:if="${#fields.hasErrors('vaccineId')}"
+										th:errors="*{vaccineId}"></span>
+									</label> <input th:field="*{vaccineId}" type="text"
+										class="form-control" name="vaccineId" id="vaccineId" value="">
+									<label class="text-danger" id="vaccineIdError"></label>
+								</div>
+								<div class="col-sm-1">
+									<label for="inputActive">Active(<span
+										class="avtype-red">*</span>)
+									</label>
+									<div class="input-group">
+										<div class="input-group-prepend">
+											<span class="fas fa-fill-drip fa-2x" id="basic-addon1"></span>
+										</div>
+
+										<input type="checkbox" aria-label="Checkbox" id="status"
+											class="avtype-active" th:field="*{active}"
+											th:checked="${true}" th:value="true" />
+									</div>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="inputVaccineName">Vaccine name(<span
+										class="avtype-red">*</span>) <span style="color: red;"
+										th:if="${#fields.hasErrors('vaccineName')}"
+										th:errors="*{vaccineName}"></span>
+									</label> <input th:field="*{vaccineName}" type="text"
+										class="form-control" name="vaccineName" id="vaccineName"
+										value=""> <label class="text-danger"
+										id="vaccineNameError"></label>
+								</div>
+								<div class="col-sm-4">
+									<label for="inputVaccineType">Vaccine Type(<span
+										class="avtype-red">*</span>)
+									</label> <select th:field="*{vaccineType}" class="custom-select"
+										name="vaccineType">
+										<option th:each="vaccineType: ${vaccineTypes}"
+											th:value="${vaccineType.vaccineTypeId}"
+											th:text="${vaccineType.vaccineTypeName}">- Select
+											Vaccine Type</option>
+									</select>
+
+								</div>
+								<div class="col-sm-4">
+									<label for="inputFirstname">Number of inject: <span
+										th:if="${#fields.hasErrors('numberOfInjection')}"
+										th:errors="*{numberOfInjection}"></span>
+									</label> <input th:field="*{numberOfInjection}" type="number"
+										name="numberOfInjection" id="numberOfInjection"
+										class="form-control" value=""> <label
+										class="text-danger" id="numberInjectError"></label>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="inputFirstname">Usage</label>
+									<textarea class="form-control" name="usage" rows="4"
+										th:field="*{usage}"></textarea>
+								</div>
+								<div class="col-sm-4">
+									<label for="inputFirstname">Indication</label>
+									<textarea class="form-control" name="indication" rows="4"
+										th:field="*{indication}"></textarea>
+								</div>
+								<div class="col-sm-4">
+									<label for="inputFirstname">Contraindication</label>
+									<textarea class="form-control" name="contraindication" rows="4"
+										th:field="*{contraindication}"></textarea>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-4">
+									<label for="inputFirstname">Time of beginning next
+										injection</label> <input type="date" class="form-control" required
+										th:field="*{timeBeginNextInjection}"
+										name="timeBeginNextInjection"> <label
+										class="text-danger" id="beginningError"></label>
+								</div>
+								<div class="col-sm-4">
+									<label for="inputFirstname">Time of ending next
+										injection</label> <input type="date" class="form-control" required
+										th:field="*{timeEndNextInjection}" name="timeEndNextInjection">
+									<label class="text-danger" id="endingError"></label>
+								</div>
+								<div class="col-sm-4">
+									<label for="inputFirstname">Origin(<span
+										class="avtype-red">*</span>) <span style="color: red;"
+										th:if="${#fields.hasErrors('origin')}"
+										th:errors="*{origin}"></span>
+									</label> <input type="text" th:field="*{origin}" class="form-control"
+										name="origin">
+
+								</div>
+							</div>
+						</div>
+
+						<div class="mb-4 ml-4" sec:authorize="hasRole('ROLE_ADMIN')">
+							<button type="submit" class="btn btn-success">Save</button>
+							<button type="reset" name="btnSubmit" value=""
+								class="btn btn-primary">Reset</button>
+							<button type="button" name="btnSubmit" value=""
+								class="btn btn-warning">
+								<a th:href="@{/vaccine/listVaccine}" style="color: white;">Cancel</a>
+							</button>
+						</div>
+						<div sec:authorize="hasRole('ROLE_USER')"></div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+
+</body>
+
+</html>

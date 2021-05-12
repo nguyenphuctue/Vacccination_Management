@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <!-- MDB icon -->
+    <link rel="icon" href="/assets/img/jw.png" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- MDB -->
+    <link rel="stylesheet" href="/assets/css/mdb.min.css" />
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css" />
+    <script src="/assets/js/js.js"></script>
+    <script src="/assets/js/bootstrap.min.js}"></script>
+    <script src="/assets/js/compiled-addons.min.js"></script>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/mdb-plugins-gathered.min.js"></script>
+    <script src="/assets/js/mdb.min.js"></script>
+    <script src="/assets/js/mdb.min.js.map"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <style>
+        .navbar {
+            z-index: 1040;
+        }
+        .side-nav {
+            margin-top: 45px !important;
+        }
+        .double-nav .breadcrumb-dn p {
+            color: #fff;
+        }
+        @media (min-width: 1200px) {
+            .fixed-sn main {
+                /* margin-left: 20% !important;
+                margin-right: 20% !important; */
+            }
+        }
+        .top-bar {
+            height: 50px;
+        }
+        .logo-img {
+            height: 100px;
+        }
+        body {
+            background-color: #e9e9e9
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".button-collapse").sideNav({
+                breakpoint: 1200
+            });
+            // SideNav Scrollbar Initialization
+            var sideNavScrollbar = document.querySelector('.custom-scrollbar');
+            var ps = new PerfectScrollbar(sideNavScrollbar);
+        });
+    </script>
+</head>
+<body class="fixed-sn light-blue-skin">
+    <!--Double navigation-->
+    <header>
+        <!-- Sidebar navigation -->
+        <div id="slide-out" class="side-nav sn-bg-4 fixed">
+            <ul class="custom-scrollbar">
+                <!-- Logo -->
+                <li>
+                    <div class="logo-wrapper waves-light ">
+                        <a href="#"><img th:if="${#authentication != 'ROLE_CUSTOMER'}" th:src="'data:image/png;base64,'+ ${#authentication.getPrincipal().getBase64Img()}" class="img-fluid flex-center logo-img"></a>
+                        <div class="user-info">
+                            <div sec:authentication="name"></div>
+                            <div sec:authentication="principal.email"></div>
+                            <ul class="collapsible collapsible-accordion">
+                        </div>
+                    </div>
+                    
+                </li>
+                <li>
+                	
+                </li>
+                
+                <!--/. Logo -->
+                <!-- Side navigation links -->
+                <li>
+                    <ul class="collapsible collapsible-accordion">
+                    	<li>
+                    		<a class="collapsible-header waves-effect arrow-r">
+                                Home
+                                <i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/home}" class="waves-effect">Home</a>
+                                    </li>
+                                    <li><a th:href="@{/logout}" class="waves-effect">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    	</li>
+                        <li>
+                            <a class="collapsible-header waves-effect arrow-r">
+                                Employee management
+                                <i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/employee/listEmployee}" class="waves-effect">Employee List</a>
+                                    </li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/employee/addEmployee}" class="waves-effect">Create Employee</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Customer management<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/customer/list-customer}" class="waves-effect">Customer List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/customer/register}" class="waves-effect">Create Customer</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Vaccine Type management<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/vaccineType/listVaccineType}" class="waves-effect">Vaccine Type List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/vaccineType/addVaccineType}" class="waves-effect">Create Vaccine Type</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Vaccine management<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/vaccine/listVaccine}" class="waves-effect">Vaccine List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/vaccine/addVaccine}" class="waves-effect">Create Vaccine</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/vaccine/importVaccine}" class="waves-effect">Import Vaccine</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Injection Schedule<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/injectionSchedule/listInjectionSchedule}" class="waves-effect">Injection Schedule List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/injectionSchedule/addInjectionSchedule}" class="waves-effect">Create Injection Schedule</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Injection Result<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/injection-result/list}" class="waves-effect">Injection Result List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/injection-result/add}" class="waves-effect">Create Injection Result</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">News<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+                                    <li><a th:href="@{/news/listNews}" class="waves-effect">News List</a></li>
+                                    <li sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/news/addNews}" class="waves-effect">News Create</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li><a class="collapsible-header waves-effect arrow-r">Report<i class="fas fa-angle-down rotate-icon"></i></a>
+                            <div class="collapsible-body">
+                                <ul>
+
+                                    <li><a th:href="@{/report/reportCustomer}" class="waves-effect">Customer Report</a></li>
+                                    <li><a th:href="@{/report/reportInjectionResult}" class="waves-effect">Report Injection Result</a></li>
+                                    <li><a th:href="@{/report/reportVaccine}" class="waves-effect">Report Vaccine</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <!--/. Side navigation links -->
+            </ul>
+            <div class="sidenav-bg mask-strong"></div>
+        </div>
+        <!--/. Sidebar navigation -->
+        <!-- Navbar -->
+        <nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg double-nav top-bar">
+            <!-- SideNav slide-out button -->
+            <div class="float-left">
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="fa fa-bars"></i></a>
+            </div>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-dn mr-auto">
+                <!-- <p>Material Design for Bootstrap</p> -->
+            </div>
+            <ul class="nav navbar-nav nav-flex-icons ml-auto">
+                <li class="nav-item " style="max-height: 37px;">
+                    <form class="search-form" role="search">
+                        <div class="form-group md-form mt-0 pt-1 waves-light">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.Navbar -->
+    </header>
+    <!--/.Double navigation-->
+
+    <!-- MDB -->
+    <script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript"></script>
+</body>
+
+</html>

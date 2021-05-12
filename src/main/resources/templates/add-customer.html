@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<title>Register Customer Infomation</title>
+
+<head th:replace="dashboard :: head">
+</head>
+
+<body class="fixed-sn light-blue-skin" onload="generateCaptcha();">
+<header th:replace="dashboard :: header"></header>
+<main style="padding-top: 15px;">
+    <div class="title"><h2></h2></div>
+    <div class="container-fluid mt-5">
+        <div class="mt-3">
+            <h4 style="text-align: center;">REGISTER CUSTOMER INFOMATION</h4>
+        </div>
+        <div style="height: 850px">
+            <form id="addEmployee" th:action="@{/customer/save}" th:object="${customer}" method="POST" class="mt-3">
+                <div class="card mt-3">
+                    <div class="pi">Personal Infomation</div>
+                    <div class="row mr-2 ml-2">
+                        <input type="text" hidden="hidden" th:field="*{customerId}">
+                        <div class="form-group col-xl-4">
+                            <label for="">Full Name (<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span></label>
+                            <input type="text" class="form-control" name="fullName" th:field="*{fullName}">
+                        </div>
+                        <div class="col-xl-4 form-group">
+                            <label for="">Date of Birth(<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></span></label>
+                            <input type="date" class="form-control" name="dateOfBirth" th:field="*{dateOfBirth}">
+                        </div>
+                        <div class="col-xl-4 form-group">
+                            <label for="">Gender(<span style="color: red;">*</span>)</label>
+                            <div class="form-control">
+                                <div class="form-check-inline">
+                                    <label class="form-check-label"><input type="radio" class="gender-radio" name="gender" th:field="*{gender}" value="false">Male</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <label class="form-check-label"><input type="radio" class="gender-radio" name="gender" th:field="*{gender}" value="true">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-2 ml-2">
+                        <div class="form-group col-xl-4">
+                            <label for="">Identity card (<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('identityCard')}" th:errors="*{identityCard}"></span></label>
+                            <input type="text" class="form-control" name="identityCard" th:field="*{identityCard}">
+                        </div>
+                        <div class="col-xl-4">
+                            <label for="">Address (<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></span></label>
+                            <input type="text" name="address" id="address" class="form-control" th:field="*{address}">
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="pi">Account Infomation</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xl-4 form-group">
+                                <label for="">User name(<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span></label>
+                                <input type="text" class="form-control" name="userName" th:field="*{userName}">
+                            </div>
+                            <div class="col-xl-4 form-group" th:if="${customer.customerId == 0}">
+                                <label for="">Password (<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span></label>
+                                <input type="password" class="form-control" th:field="*{password}" name="password" id="encryptedPassword">
+                            </div>
+                            <div class="col-xl-4 form-group" th:if="${customer.customerId == 0}">
+                                <label for="">Password Confirm (<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></span></label>
+                                <input type="password" class="form-control" name="passwordConfirm" th:field="*{confirmPassword}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 form-group">
+                                <label for="">Email(<span style="color: red;">*</span>)
+                                    <span style="color: red;" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                                </label>
+                                <input type="text" name="email" id="email" class="form-control" th:field="*{email}" value="">
+                            </div>
+                            <div class="col-xl-4 form-group">
+                                <label for="">Phone(<span style="color: red;">*</span>)
+                                    <span style="color: red;" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+                                </label>
+                                <input type="text" name="phone" id="phone" th:field="*{phone}" class="form-control" value="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-4 form-group">
+                                <label for="">Capcha(<span style="color: red;">*</span>)<span style="color: red;" th:if="${#fields.hasErrors('captcha')}" th:errors="*{captcha}"></span></label>
+                                <input type="text" name="capcha" class="form-control" th:field="*{captcha}">
+                            </div>
+                            <div class="col-xl-4 form-group">
+                                <label for="">Code()</label>
+                                <input type="text" name="code" id="mainCaptcha" readonly="readonly" class="form-control">
+                                <input type="button" id="refresh" value="Refresh" onclick="generateCaptcha();"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 ml">
+                            <button type="submit" class="btn btn-success" id="saveEmployee">Save</button>
+                            <button type="reset" class="btn btn-info" id="resetData" onclick="generateCaptcha();">Reset</button>
+                            <button type="submit" class="btn btn-warning text-white" onclick="window.history.go(-1); return false;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+<script type="text/javascript">
+    function generateCaptcha() {
+        var alpha = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
+            'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+            '1','2','3','4','5','6','7','8','9','0');
+        var i;
+        for (i=0;i<6;i++){
+            var a = alpha[Math.floor(Math.random() * alpha.length)];
+            var b = alpha[Math.floor(Math.random() * alpha.length)];
+            var c = alpha[Math.floor(Math.random() * alpha.length)];
+            var d = alpha[Math.floor(Math.random() * alpha.length)];
+            var e = alpha[Math.floor(Math.random() * alpha.length)];
+            var f = alpha[Math.floor(Math.random() * alpha.length)];
+        }
+        var code = a + '' + b + '' + '' + c + '' + d + '' + e + '' + f;
+        document.getElementById("mainCaptcha").value = code
+    }
+</script>
+</body>
+
+</html>

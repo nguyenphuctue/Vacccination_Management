@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+<head th:replace="dashboard :: head">
+</head>
+<title>Report Injection Result</title>
+<link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+
+<body class="fixed-sn light-blue-skin">
+
+	<header th:replace="dashboard :: header"> </header>
+
+	<!--Main Layout-->
+	<main style="padding-top: 15px;">
+		<div class="title">
+			<h2></h2>
+		</div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3">
+				<h4 style="text-align: center;">REPORT INJECTION RESULT</h4>
+			</div>
+			<div>
+				<div class="card">
+					<div class="row ml-3 ">
+						<div class="mt-3 row" style="border-bottom: solid 1px #ccc;">
+							<div style="text-align: center; color: red" th:text="${mess}"></div>
+							<form th:action="@{/report/chartInjectionResult}" method="get">
+								<table class="">
+									<tr>
+										<th scope="col" class="">Display Type:</th>
+										<th scope="col" class="yearFilter">Select year:</th>
+									</tr>
+									<tr>
+										<td><input type="radio" class="" id="showReport">
+											Report <input type="radio" class="" id="showChart" checked>
+											Chart</td>
+										<td class="yearFilter"><select name="year" id="year"
+											class="" th:value="${year}" onchange="this.form.submit()">
+												<option value="">Select</option>
+												<option th:each="selectYear : ${listYears}"
+													th:value="${selectYear}" th:text="${selectYear}"
+													th:selected="${selectYear} == ${year}"></option>
+										</select></td>
+									</tr>
+								</table>
+							</form>
+						</div>
+
+						<div style="text-align: center; color: red"></div>
+						<div style="text-align: center; color: red"></div>
+					</div>
+					<div id="chart" class="card-body ml-3"></div>
+				</div>
+			</div>
+
+		</div>
+	</main>
+	<!--Main Layout-->
+	<!-- MDB -->
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+	<script type="text/javascript"
+		src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript"
+		src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript"
+		src="https://www.gstatic.com/charts/loader.js"></script>
+	<!-- Custom scripts -->
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#reportInjectionResult').DataTable({
+				"ordering" : false,
+				"searching" : false,
+				"pagingType" : "simple_numbers",
+
+			});
+
+			$('#showReport').click(function() {
+				if ($(this).is(":checked"))
+					$('#showChart').prop('checked', false);
+				window.location.replace('reportInjectionResult');
+			});
+
+			$('#showChart').click(function() {
+				if ($(this).is(":checked"))
+					$('#showReport').prop('checked', false);
+				window.location.replace('chartInjectionResult');
+			});
+		});
+		function myFunction() {
+			if (!(confirm('Are you sure to delete?')))
+				return false;
+		}
+	</script>
+	<script th:inline="javascript">
+		var real_data = /*[[${chartData}]]*/'nodata';
+		$(document).ready(function() {
+			google.charts.load('current', {
+				packages : [ 'corechart', 'bar' ]
+			});
+			google.charts.setOnLoadCallback(drawColumnChart);
+		});
+
+		function drawColumnChart() {
+			var data = new google.visualization.DataTable();
+			data.addColumn('string', 'Month');
+			data.addColumn('number', 'Number of inject');
+			Object.keys(real_data).forEach(function(key) {
+				data.addRow([ key, real_data[key] ]);
+			});
+			var options = {
+				title : 'REPORT INJECTION RESULT CHART'
+			};
+			var chart = new google.visualization.ColumnChart(document
+					.getElementById('chart'));
+			chart.draw(data, options);
+		}
+	</script>
+
+</body>
+
+</html>

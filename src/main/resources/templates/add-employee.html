@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<title>Add Employee</title>
+<head th:replace="dashboard :: head">
+</head>
+<body class="fixed-sn light-blue-skin" >
+	<header th:replace="dashboard :: header"></header>
+	<main style="padding-top: 15px;">
+		<div class="title">
+			<h2></h2>
+		</div>
+		<div class="container-fluid mt-5">
+			<div class="mt-3">
+				<h4 style="text-align: center;"><span th:if="${param.employeeId == null}">ADD</span><span th:if="${employee.employeeId != null}">UPDATE</span> EMPLOYEE</h4>
+			</div>
+			<div style="height: 850px">
+				<div class="card mt-3">
+					<div style="text-align: center; color: red" th:text="${mess}"></div>
+					<form id="addEmployee" th:action="@{/employee/addEmployee}"
+						th:object="${employee}" method="post"
+						enctype="multipart/form-data" class="mt-3">
+						<div class="row mr-2 ml-2">
+							<div class="form-group col-xl-4">
+								<label for="">Employee Id (<span style="color: red;">*</span>)
+								<br><span th:if="${#fields.hasErrors('employeeId')}"
+									th:errors="*{employeeId}" style="color: red;"></span>
+								</label> <input th:readonly="${employee.employeeId != null}" th:field="*{employeeId}" type="text" class="form-control"
+									name="employeeCode" id="employeeId" value="">
+									<input type="hidden" th:field="*{statusSave}" name="statusSave" id="statusSave" value="">
+							</div>
+							<div class="form-group col-xl-4">
+								<label for="">Employee Name(<span style="color: red;">*</span>)
+								<br><span th:if="${#fields.hasErrors('employeeName')}"
+									th:errors="*{employeeName}" style="color: red;"></span>
+								</label> <input th:field="*{employeeName}" type="text"
+									class="form-control" name="employeeName" id="employeeName"
+									value="">
+							</div>
+							<div class="col-xl-4 form-group">
+								<label for="">Gender(<span style="color: red;">*</span>)
+								<br><span th:if="${#fields.hasErrors('gender')}"
+									th:errors="*{gender}" style="color: red;"></span>
+								</label>
+								<div class="form-control">
+									<div class="form-check-inline">
+										<label class="form-check-label"> <input
+											th:field="*{gender}" type="radio" class="" name="gender"
+											value="0" id="gender">Male
+										</label>
+									</div>
+									<div class="form-check-inline">
+										<label class="form-check-label"> <input
+											th:field="*{gender}" type="radio" class="" name="gender"
+											value="1" id="gender">Female
+										</label>
+									</div>
+								</div>
+								<div class="error"></div>
+							</div>
+						</div>
+						<div class="row mr-2 ml-2">
+							<div class="col-xl-4 form-group">
+								<label for="">Date of Birth(<span style="color: red;">*</span>)
+									<br><span th:if="${#fields.hasErrors('dateOfBirth')}"
+									th:errors="*{dateOfBirth}" style="color: red;"></span>
+								</label> <input th:field="*{dateOfBirth}" type="date" id="date"
+									class="form-control" name="date">
+							</div>
+							<div class="col-xl-4 form-group">
+								<label for="">Phone(<span style="color: red;">*</span>)
+									<br><span th:if="${#fields.hasErrors('phone')}"
+									th:errors="*{phone}" style="color: red;"></span>
+								</label> <input th:field="*{phone}" type="text" name="phone" id="phone"
+									class="form-control" value="">
+							</div>
+							<div class="col-xl-4">
+								<label for="">Address (<span style="color: red;">*</span>)
+								<br><span th:if="${#fields.hasErrors('address')}"
+									th:errors="*{address}" style="color: red;"></span>
+								</label> <input th:field="*{address}" type="text" name="address"
+									id="address" class="form-control" value="">
+							</div>
+						</div>
+						<div class="row mr-2 ml-2">
+							<div class="col-xl-4 form-group">
+								<label for="">Email(<span style="color: red;">*</span>)
+									<br><span th:if="${#fields.hasErrors('email')}"
+									th:errors="*{email}" style="color: red;"></span>
+								</label> <input th:field="*{email}" type="text" name="email" id="email"
+									class="form-control" value="">
+							</div>
+							<div class="col-xl-4 form-group">
+								<label for="">Working Place</label> <input
+									th:field="*{workingPlace}" type="text" class="form-control"
+									name="workingPlace" id="workingPlace" value="">
+							</div>
+							<div class="col-xl-4 form-group">
+								<label for="">Position</label> <input th:field="*{position}"
+									type="text" class="form-control" id="position" name="position"
+									value="">
+							</div>
+						</div>
+						<div class="row mr-2 ml-2">
+							<div class="form-group col-xl-4">
+							<label for="">Image</label> <input type="file"
+									class="form-control-file border" id="images" name="images"
+									accept="image/png, image/jpeg, image.jpg"
+									onchange="PreviewImage();">
+									<input type="hidden" th:field="*{image}" name="image" id="image" value="">
+								<div>
+									<img id="avatar" class="rounded float-left ml-5 mr-5 mt-3"
+										style="width: 150px; height: 120px;" alt="AVATAR"
+										th:src="'data:image/png;base64,'+ ${employee.base64Img}">
+									<input type="hidden" th:field="*{base64Img}" name="base64Img" id="base64Img" value="">
+								</div>
+							</div>
+						</div>
+						<div class="mb-5">
+							<button type="submit" class="btn btn-success" id="saveEmployee">Save</button>
+							<button type="reset" class="btn btn-info" id="resetData">Reset</button>
+							<button type="submit" class="btn btn-warning"
+								onclick="window.history.go(-1); return false;">Cancel</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script type="text/javascript" src="/assets/js/mdb.min.js"></script>
+	<script type="text/javascript">
+		function PreviewImage() {
+			var oFReader = new FileReader();
+			oFReader.readAsDataURL(document.getElementById("images").files[0]);
+			oFReader.onload = function(oFREvent) {
+				document.getElementById("avatar").src = oFREvent.target.result;
+			};
+		};
+	</script>
+</body>
+</html>
